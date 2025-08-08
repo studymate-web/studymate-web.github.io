@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyMate IA - Asistente Académico Inteligente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-brain me-2"></i>
+                StudyMate IA
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="userInfo">
+                            <i class="fas fa-user me-1"></i>
+                            <span id="userName">Usuario</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt me-1"></i>
+                            Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login/Register Modal -->
+    <div class="modal fade" id="authModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalTitle">Iniciar Sesión</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="authForm">
+                        <div class="mb-3" id="nombreDiv" style="display: none;">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre">
+                        </div>
+                        <div class="mb-3" id="apellidoDiv" style="display: none;">
+                            <label for="apellido" class="form-label">Apellido</label>
+                            <input type="text" class="form-control" id="apellido">
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="mb-3" id="confirmPasswordDiv" style="display: none;">
+                            <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                            <input type="password" class="form-control" id="confirmPassword">
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary" id="authSubmitBtn">Iniciar Sesión</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="#" id="toggleAuthMode">¿No tienes cuenta? Regístrate</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mt-4" id="mainContent" style="display: none;">
+        <!-- Welcome Section -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card bg-gradient-primary text-white">
+                    <div class="card-body text-center">
+                        <h1 class="display-4">
+                            <i class="fas fa-brain me-3"></i>
+                            StudyMate IA
+                        </h1>
+                        <p class="lead">Tu asistente académico inteligente</p>
+                        <p class="mb-0">Organiza tu estudio, resuelve dudas y optimiza tu aprendizaje con IA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="row g-4 mb-4">
+            <!-- Chatbot Académico -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card" data-feature="chatbot">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-comments fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Chatbot Académico</h5>
+                        <p class="card-text">Resuelve dudas sobre cualquier materia con ayuda de IA</p>
+                        <button class="btn btn-primary" onclick="openFeature('chatbot')">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Usar Chatbot
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plan de Estudio -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card" data-feature="plan">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-calendar-alt fa-3x text-success"></i>
+                        </div>
+                        <h5 class="card-title">Plan de Estudio</h5>
+                        <p class="card-text">Genera planes personalizados basados en tus materias y tiempo</p>
+                        <button class="btn btn-success" onclick="openFeature('plan')">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Crear Plan
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumen de PDF -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card" data-feature="pdf">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-file-pdf fa-3x text-danger"></i>
+                        </div>
+                        <h5 class="card-title">Resumen de PDF</h5>
+                        <p class="card-text">Resume documentos académicos con inteligencia artificial</p>
+                        <button class="btn btn-danger" onclick="openFeature('pdf')">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Resumir PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notas -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card" data-feature="notes">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-sticky-note fa-3x text-warning"></i>
+                        </div>
+                        <h5 class="card-title">Mis Notas</h5>
+                        <p class="card-text">Organiza y gestiona tus notas por materias</p>
+                        <button class="btn btn-warning" onclick="openFeature('notes')">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Ver Notas
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tareas -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card" data-feature="tasks">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-tasks fa-3x text-info"></i>
+                        </div>
+                        <h5 class="card-title">Mis Tareas</h5>
+                        <p class="card-text">Gestiona tus tareas y entregas con recordatorios</p>
+                        <button class="btn btn-info" onclick="openFeature('tasks')">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Ver Tareas
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Materias -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 feature-card" data-feature="subjects">
+                    <div class="card-body text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-book fa-3x text-secondary"></i>
+                        </div>
+                        <h5 class="card-title">Mis Materias</h5>
+                        <p class="card-text">Organiza y gestiona tus materias académicas</p>
+                        <button class="btn btn-secondary" onclick="openFeature('subjects')">
+                            <i class="fas fa-arrow-right me-2"></i>
+                            Ver Materias
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-history me-2"></i>
+                            Actividad Reciente
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="recentActivity">
+                            <p class="text-muted">No hay actividad reciente</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Modals -->
+    <!-- Chatbot Modal -->
+    <div class="modal fade" id="chatbotModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-comments me-2"></i>
+                        Chatbot Académico
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="message bot-message">
+                                <div class="message-content">
+                                    <i class="fas fa-robot me-2"></i>
+                                    ¡Hola! Soy tu asistente académico. ¿En qué puedo ayudarte hoy?
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="chatInput" placeholder="Escribe tu pregunta...">
+                                <button class="btn btn-primary" type="button" id="sendChatBtn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Plan de Estudio Modal -->
+    <div class="modal fade" id="planModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        Generar Plan de Estudio
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="planForm">
+                        <div class="mb-3">
+                            <label class="form-label">Materias (separadas por comas)</label>
+                            <input type="text" class="form-control" id="planSubjects" 
+                                   placeholder="Ej: Matemáticas, Física, Programación" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Horas disponibles por semana</label>
+                            <input type="number" class="form-control" id="planHours" 
+                                   placeholder="20" min="1" max="168" required>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-magic me-2"></i>
+                                Generar Plan
+                            </button>
+                        </div>
+                    </form>
+                    <div id="planResult" class="mt-3" style="display: none;">
+                        <hr>
+                        <h6>Tu Plan de Estudio:</h6>
+                        <div id="planContent" class="border rounded p-3 bg-light"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Resumen Modal -->
+    <div class="modal fade" id="pdfModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-file-pdf me-2"></i>
+                        Resumir Contenido
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="pdfForm">
+                        <div class="mb-3">
+                            <label for="pdfFile" class="form-label">Archivo PDF</label>
+                            <input type="file" class="form-control" id="pdfFile" accept=".pdf" />
+                            <small class="form-text text-muted">O sube un archivo PDF directamente</small>
+                        </div>
+                        <div class="mb-3">
+                            <label for="pdfContent" class="form-label">Contenido a resumir (opcional)</label>
+                            <textarea class="form-control" id="pdfContent" rows="8" 
+                                      placeholder="O pega aquí el contenido que quieres resumir..."></textarea>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-compress-alt me-2"></i>
+                                Generar Resumen
+                            </button>
+                        </div>
+                    </form>
+                    <div id="pdfResult" class="mt-3" style="display: none;">
+                        <hr>
+                        <h6>Resumen Generado:</h6>
+                        <div id="pdfSummary" class="border rounded p-3 bg-light"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notas Modal -->
+    <div class="modal fade" id="notesModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-sticky-note me-2"></i>
+                        Mis Notas
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6>Gestionar Notas</h6>
+                        <button class="btn btn-warning btn-sm" onclick="showCreateNoteForm()">
+                            <i class="fas fa-plus me-1"></i>
+                            Nueva Nota
+                        </button>
+                    </div>
+                    
+                    <!-- Formulario para crear/editar nota -->
+                    <div id="noteForm" style="display: none;">
+                        <form id="createNoteForm">
+                            <div class="mb-3">
+                                <label for="noteTitle" class="form-label">Título</label>
+                                <input type="text" class="form-control" id="noteTitle" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="noteContent" class="form-label">Contenido</label>
+                                <textarea class="form-control" id="noteContent" rows="6" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="noteSubjectStatic" class="form-label">Materia (opcional)</label>
+                                <select class="form-control" id="noteSubjectStatic">
+                                    <option value="">Seleccionar materia</option>
+                                </select>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-save me-2"></i>
+                                    Guardar Nota
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="hideCreateNoteForm()">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                        <hr>
+                    </div>
+                    
+                    <!-- Lista de notas -->
+                    <div id="notesList">
+                        <p class="text-muted">No hay notas disponibles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tareas Modal -->
+    <div class="modal fade" id="tasksModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-tasks me-2"></i>
+                        Mis Tareas
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6>Gestionar Tareas</h6>
+                        <button class="btn btn-info btn-sm" onclick="showCreateTaskForm()">
+                            <i class="fas fa-plus me-1"></i>
+                            Nueva Tarea
+                        </button>
+                    </div>
+                    
+                    <!-- Formulario para crear/editar tarea -->
+                    <div id="taskForm" style="display: none;">
+                        <form id="createTaskForm">
+                            <div class="mb-3">
+                                <label for="taskTitle" class="form-label">Título</label>
+                                <input type="text" class="form-control" id="taskTitle" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="taskDescription" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="taskDescription" rows="3"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="taskSubjectStatic" class="form-label">Materia</label>
+                                        <select class="form-control" id="taskSubjectStatic">
+                                            <option value="">Seleccionar materia</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="taskDueDate" class="form-label">Fecha límite</label>
+                                        <input type="datetime-local" class="form-control" id="taskDueDate">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="taskPriority" class="form-label">Prioridad</label>
+                                <select class="form-control" id="taskPriority">
+                                    <option value="baja">Baja</option>
+                                    <option value="media" selected>Media</option>
+                                    <option value="alta">Alta</option>
+                                    <option value="urgente">Urgente</option>
+                                </select>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-info">
+                                    <i class="fas fa-save me-2"></i>
+                                    Guardar Tarea
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="hideCreateTaskForm()">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                        <hr>
+                    </div>
+                    
+                    <!-- Lista de tareas -->
+                    <div id="tasksList">
+                        <p class="text-muted">No hay tareas disponibles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Materias Modal -->
+    <div class="modal fade" id="subjectsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-book me-2"></i>
+                        Mis Materias
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6>Gestionar Materias</h6>
+                        <button class="btn btn-secondary btn-sm" onclick="showCreateSubjectForm()">
+                            <i class="fas fa-plus me-1"></i>
+                            Nueva Materia
+                        </button>
+                    </div>
+                    
+                    <!-- Formulario para crear/editar materia -->
+                    <div id="subjectForm" style="display: none;">
+                        <form id="createSubjectForm">
+                            <div class="mb-3">
+                                <label for="subjectName" class="form-label">Nombre de la Materia</label>
+                                <input type="text" class="form-control" id="subjectName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subjectDescription" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="subjectDescription" rows="3"></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="subjectProfessor" class="form-label">Profesor</label>
+                                        <input type="text" class="form-control" id="subjectProfessor" placeholder="Nombre del profesor">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Horario</label>
+                                <div id="scheduleContainer">
+                                    <div class="schedule-item mb-2">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <select class="form-control schedule-day">
+                                                    <option value="">Seleccionar día</option>
+                                                    <option value="Lunes">Lunes</option>
+                                                    <option value="Martes">Martes</option>
+                                                    <option value="Miércoles">Miércoles</option>
+                                                    <option value="Jueves">Jueves</option>
+                                                    <option value="Viernes">Viernes</option>
+                                                    <option value="Sábado">Sábado</option>
+                                                    <option value="Domingo">Domingo</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="time" class="form-control schedule-start" placeholder="Inicio">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="time" class="form-control schedule-end" placeholder="Fin">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="button" class="btn btn-outline-danger btn-sm remove-schedule">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-info btn-sm" onclick="addScheduleItem()">
+                                    <i class="fas fa-plus me-1"></i>
+                                    Agregar Horario
+                                </button>
+                            </div>
+                            <div class="mb-3">
+                                <label for="subjectColor" class="form-label">Color</label>
+                                <input type="color" class="form-control" id="subjectColor" value="#6c757d">
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-secondary">
+                                    <i class="fas fa-save me-2"></i>
+                                    Guardar Materia
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="hideCreateSubjectForm()">
+                                    Cancelar
+                                </button>
+                            </div>
+                        </form>
+                        <hr>
+                    </div>
+                    
+                    <!-- Lista de materias -->
+                    <div id="subjectsList">
+                        <p class="text-muted">No hay materias disponibles</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Módulos de la aplicación -->
+    <script src="js/modules/auth.js"></script>
+    <script src="js/modules/ai.js"></script>
+    <script src="js/modules/notes.js"></script>
+    <script src="js/app-modular.js"></script>
+</body>
+</html>

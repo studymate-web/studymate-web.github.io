@@ -1,0 +1,667 @@
+/* StudyMate IA - Estilos Personalizados */
+
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --transition-speed: 0.3s;
+    --border-radius: 12px;
+    --box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    --box-shadow-hover: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+/* Asegurar que la página tenga scroll */
+html, body {
+    height: auto;
+    overflow-x: hidden;
+}
+
+body {
+    overflow-y: auto;
+    min-height: 100vh;
+}
+
+/* Contenedor principal */
+#mainContent {
+    min-height: auto;
+    padding-bottom: 2rem;
+}
+
+/* Asegurar que las tarjetas de actividades sean visibles */
+.card {
+    margin-bottom: 1rem;
+}
+
+/* Mejorar la visibilidad de las actividades recientes */
+#recentActivity {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
+}
+
+#recentActivity::-webkit-scrollbar {
+    width: 6px;
+}
+
+#recentActivity::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+#recentActivity::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+#recentActivity::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Gradientes personalizados */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+}
+
+/* Efectos hover para las tarjetas */
+.feature-card {
+    transition: all var(--transition-speed) ease;
+    border: none;
+    box-shadow: var(--box-shadow);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    position: relative;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.feature-card:hover::before {
+    left: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--box-shadow-hover);
+}
+
+.feature-icon {
+    transition: all var(--transition-speed) ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Chat container mejorado */
+.chat-container {
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    margin-bottom: 0;
+}
+
+.chat-input-container {
+    flex-shrink: 0;
+    background: white;
+    padding: 15px;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Mensajes del chat mejorados */
+.message {
+    margin-bottom: 15px;
+    display: flex;
+    animation: slideInUp 0.3s ease;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.user-message {
+    justify-content: flex-end;
+}
+
+.bot-message {
+    justify-content: flex-start;
+}
+
+.message-content {
+    max-width: 70%;
+    padding: 12px 18px;
+    border-radius: 18px;
+    word-wrap: break-word;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.user-message .message-content {
+    background: linear-gradient(135deg, var(--primary-color) 0%, #0056b3 100%);
+    color: white;
+    border-bottom-right-radius: 5px;
+}
+
+.bot-message .message-content {
+    background: white;
+    color: var(--dark-color);
+    border: 1px solid #e9ecef;
+    border-bottom-left-radius: 5px;
+}
+
+/* Loading animation mejorado */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Animaciones de entrada mejoradas */
+.fade-in {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px) scale(0.95); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0) scale(1); 
+    }
+}
+
+/* Estilos para el navbar mejorado */
+.navbar-brand {
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: all var(--transition-speed) ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+/* Estilos para los modales mejorados */
+.modal-content {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.modal-header {
+    border-bottom: 1px solid #e9ecef;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* Estilos para formularios mejorados */
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    transform: scale(1.02);
+    transition: all var(--transition-speed) ease;
+}
+
+.form-control {
+    border-radius: 8px;
+    transition: all var(--transition-speed) ease;
+}
+
+/* Estilos para botones mejorados */
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all var(--transition-speed) ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Estilos para dropdowns - forzar visibilidad */
+select.form-control {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 9999 !important;
+}
+
+select.form-control option {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Asegurar que los dropdowns en modales sean visibles */
+.modal select.form-control {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 9999 !important;
+}
+
+/* Forzar visibilidad de opciones en dropdowns */
+.modal select.form-control option {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background-color: white !important;
+    color: black !important;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Estilos para las tarjetas mejorados */
+.card {
+    border-radius: var(--border-radius);
+    border: none;
+    box-shadow: var(--box-shadow);
+    transition: all var(--transition-speed) ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    box-shadow: var(--box-shadow-hover);
+    transform: translateY(-2px);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-bottom: 1px solid #e9ecef;
+}
+
+/* Estilos para el contenido del plan y resumen mejorados */
+#planContent, #pdfSummary {
+    white-space: pre-wrap;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    padding: 20px;
+    border-left: 4px solid var(--primary-color);
+}
+
+/* Responsive design mejorado */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .feature-card {
+        margin-bottom: 20px;
+    }
+    
+    .chat-container {
+        height: 300px;
+    }
+    
+    .message-content {
+        max-width: 85%;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Estilos para la actividad reciente mejorados */
+.activity-item {
+    padding: 15px 0;
+    border-bottom: 1px solid #e9ecef;
+    transition: all var(--transition-speed) ease;
+}
+
+.activity-item:hover {
+    background-color: #f8f9fa;
+    padding-left: 10px;
+    border-radius: 8px;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    transition: all var(--transition-speed) ease;
+}
+
+.activity-item:hover .activity-icon {
+    transform: scale(1.1);
+}
+
+/* Estilos para el estado de carga mejorados */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(5px);
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+/* Estilos para notificaciones mejorados */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: var(--border-radius);
+    color: white;
+    font-weight: 500;
+    z-index: 10000;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.notification.success {
+    background: linear-gradient(135deg, var(--success-color) 0%, #1e7e34 100%);
+}
+
+.notification.error {
+    background: linear-gradient(135deg, var(--danger-color) 0%, #c82333 100%);
+}
+
+.notification.info {
+    background: linear-gradient(135deg, var(--info-color) 0%, #138496 100%);
+}
+
+.notification.warning {
+    background: linear-gradient(135deg, var(--warning-color) 0%, #e0a800 100%);
+    color: #212529;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Estilos para el scrollbar personalizado mejorado */
+.chat-messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #c1c1c1 0%, #a8a8a8 100%);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #a8a8a8 0%, #8f8f8f 100%);
+}
+
+/* Elementos específicos mejorados */
+.color-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    transition: all var(--transition-speed) ease;
+}
+
+.btn-group-sm .btn:hover {
+    transform: scale(1.05);
+}
+
+.badge {
+    font-size: 0.75em;
+    padding: 0.35em 0.65em;
+    border-radius: 6px;
+}
+
+.text-decoration-line-through {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+/* Estilos para el selector de horarios mejorados */
+.schedule-item {
+    border: 1px solid #dee2e6;
+    border-radius: var(--border-radius);
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    transition: all var(--transition-speed) ease;
+    margin-bottom: 10px;
+}
+
+.schedule-item:hover {
+    background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    transform: translateX(5px);
+    box-shadow: var(--box-shadow);
+}
+
+.remove-schedule {
+    border: none;
+    background: none;
+    color: #dc3545;
+    transition: all var(--transition-speed) ease;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-schedule:hover {
+    color: #c82333;
+    background-color: #f8d7da;
+    transform: scale(1.1);
+}
+
+.schedule-day, .schedule-start, .schedule-end {
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    transition: all var(--transition-speed) ease;
+}
+
+.schedule-day:focus, .schedule-start:focus, .schedule-end:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    transform: scale(1.02);
+}
+
+/* Mejoras adicionales para la experiencia de usuario */
+.form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-text {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+/* Animaciones para elementos que aparecen */
+.card, .btn, .form-control {
+    animation: fadeInUp 0.6s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efectos de hover para enlaces */
+a {
+    transition: all var(--transition-speed) ease;
+}
+
+a:hover {
+    text-decoration: none;
+    transform: translateY(-1px);
+}
+
+/* Mejoras para modales */
+.modal-dialog {
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Estilos para estados de carga */
+.loading-state {
+    opacity: 0.6;
+    pointer-events: none;
+    position: relative;
+}
+
+.loading-state::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    transform: translate(-50%, -50%);
+}
+
+/* Mejoras para dispositivos móviles */
+@media (max-width: 576px) {
+    .container {
+        padding: 0 10px;
+    }
+    
+    .modal-dialog {
+        margin: 10px;
+    }
+    
+    .notification {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+    }
+}

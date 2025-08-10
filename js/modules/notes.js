@@ -241,6 +241,29 @@ class NotesModule {
                 this.authModule.showLoading();
             }
             
+            // Validar campos requeridos
+            if (!title || title.trim() === '') {
+                if (this.authModule) {
+                    this.authModule.showNotification('El título es obligatorio', 'error');
+                }
+                return;
+            }
+            
+            const payload = {
+                titulo: title.trim(),
+                contenido: content || ''
+            };
+            
+            // Agregar materia si está seleccionada
+            if (subject) {
+                payload.materia = { id: Number(subject) };
+            }
+            
+            // Log para debugging
+            console.log('Payload a enviar:', payload);
+            console.log('URL:', editId ? `${this.API_BASE_URL}/notas/${editId}` : `${this.API_BASE_URL}/notas`);
+            console.log('Método:', editId ? 'PUT' : 'POST');
+            
             const method = editId ? 'PUT' : 'POST';
             const url = editId ? `${this.API_BASE_URL}/notas/${editId}` : `${this.API_BASE_URL}/notas`;
             
@@ -250,17 +273,20 @@ class NotesModule {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.authModule ? this.authModule.getAuthToken() : ''}`
                 },
-                body: JSON.stringify((() => {
-                    const payload = { titulo: title, contenido: content };
-                    if (subject) payload.materia = { id: Number(subject) };
-                    return payload;
-                })())
+                body: JSON.stringify(payload)
             });
 
             const data = await response.json();
             if (this.authModule) {
                 this.authModule.hideLoading();
             }
+
+            // Log de la respuesta para debugging
+            console.log('Respuesta del servidor:', {
+                status: response.status,
+                statusText: response.statusText,
+                data: data
+            });
 
             if (response.ok) {
                 const message = editId ? 'Nota actualizada exitosamente' : 'Nota creada exitosamente';
@@ -278,8 +304,9 @@ class NotesModule {
                     formElement.removeAttribute('data-edit-id');
                 }
             } else {
+                console.error('Error en la respuesta:', data);
                 if (this.authModule) {
-                    this.authModule.showNotification(data.error || 'Error al procesar nota', 'error');
+                    this.authModule.showNotification(data.message || data.error || 'Error al procesar nota', 'error');
                 }
             }
         } catch (error) {
@@ -328,7 +355,8 @@ class NotesModule {
                     
                     if (titleField) titleField.value = note.titulo || '';
                     if (contentField) contentField.value = note.contenido || '';
-                    if (subjectField) subjectField.value = note.materia || '';
+                    // Asignar el ID de la materia, no el objeto completo
+                    if (subjectField) subjectField.value = note.materia ? note.materia.id : '';
                 }, 200);
             } else {
                 if (this.authModule) {

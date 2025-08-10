@@ -564,13 +564,16 @@ class TasksModule {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.authModule ? this.authModule.getAuthToken() : ''}`
                 },
-                body: JSON.stringify({
-                    titulo: title,
-                    descripcion: description,
-                    materia: subject,
-                    fechaVencimiento: dueDate,
-                    prioridad: priority
-                })
+                body: JSON.stringify((() => {
+                    const payload = {
+                        titulo: title,
+                        descripcion: description,
+                        prioridad: priority
+                    };
+                    if (dueDate) payload.fechaVencimiento = dueDate;
+                    if (subject) payload.materia = { id: Number(subject) };
+                    return payload;
+                })())
             });
 
             const data = await response.json();
@@ -626,7 +629,7 @@ class TasksModule {
                     // Agregar materias
                     data.materias.forEach(subject => {
                         const option = document.createElement('option');
-                        option.value = subject.nombre;
+                        option.value = subject.id;
                         option.textContent = subject.nombre;
                         dropdown.appendChild(option);
                     });

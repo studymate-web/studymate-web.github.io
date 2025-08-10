@@ -108,15 +108,7 @@ class AuthModule {
                 return;
             }
 
-            // Intentar obtener usuario desde localStorage primero
-            const storedUser = localStorage.getItem('currentUser');
-            if (storedUser) {
-                this.currentUser = JSON.parse(storedUser);
-                this.showMainContent();
-                return;
-            }
-
-            // Si no hay usuario en localStorage, verificar con el servidor
+            // Validar SIEMPRE el token contra el servidor
             const response = await fetch(`${this.API_BASE_URL}/auth/me`, {
                 headers: {
                     'Authorization': `Bearer ${this.authToken}`

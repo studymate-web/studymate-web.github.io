@@ -250,11 +250,11 @@ class NotesModule {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.authModule ? this.authModule.getAuthToken() : ''}`
                 },
-                body: JSON.stringify({
-                    titulo: title,
-                    contenido: content,
-                    materia: subject
-                })
+                body: JSON.stringify((() => {
+                    const payload = { titulo: title, contenido: content };
+                    if (subject) payload.materia = { id: Number(subject) };
+                    return payload;
+                })())
             });
 
             const data = await response.json();
@@ -398,7 +398,7 @@ class NotesModule {
                     // Agregar materias
                     subjects.forEach(subject => {
                         const option = document.createElement('option');
-                        option.value = subject.nombre;
+                        option.value = subject.id;
                         option.textContent = subject.nombre;
                         dropdown.appendChild(option);
                     });

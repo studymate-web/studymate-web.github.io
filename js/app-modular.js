@@ -558,43 +558,70 @@ class TasksModule {
             const method = editId ? 'PUT' : 'POST';
             const url = editId ? `${this.API_BASE_URL}/tareas/${editId}` : `${this.API_BASE_URL}/tareas`;
             
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.authModule ? this.authModule.getAuthToken() : ''}`
-                },
-                body: JSON.stringify((() => {
-                    const payload = {
-                        titulo: title,
-                        descripcion: description,
-                        prioridad: priority
-                    };
-                    
-                    // Convertir fecha de vencimiento a formato correcto
-                    if (dueDate) {
-                        const date = new Date(dueDate);
+            // Validar campos requeridos
+            if (!title || title.trim() === '') {
+                if (this.authModule) {
+                    this.authModule.showNotification('El título es obligatorio', 'error');
+                }
+                return;
+            }
+            
+            const payload = {
+                titulo: title.trim(),
+                descripcion: description || '',
+                prioridad: priority || 'MEDIA'
+            };
+            
+            // Convertir fecha de vencimiento a formato correcto
+            if (dueDate) {
+                try {
+                    const date = new Date(dueDate);
+                    if (!isNaN(date.getTime())) {
                         const year = date.getFullYear();
                         const month = String(date.getMonth() + 1).padStart(2, '0');
                         const day = String(date.getDate()).padStart(2, '0');
                         const hours = String(date.getHours()).padStart(2, '0');
                         const minutes = String(date.getMinutes()).padStart(2, '0');
                         payload.fechaLimite = `${year}-${month}-${day}T${hours}:${minutes}:00`;
+                        console.log('Fecha formateada:', payload.fechaLimite);
+                    } else {
+                        console.warn('Fecha inválida:', dueDate);
                     }
-                    
-                    // Agregar materia si está seleccionada
-                    if (subject) {
-                        payload.materia = { id: Number(subject) };
-                    }
-                    
-                    return payload;
-                })())
+                } catch (error) {
+                    console.error('Error al formatear fecha:', error);
+                }
+            }
+            
+            // Agregar materia si está seleccionada
+            if (subject) {
+                payload.materia = { id: Number(subject) };
+            }
+            
+            // Log para debugging
+            console.log('Payload a enviar:', payload);
+            console.log('URL:', url);
+            console.log('Método:', method);
+            
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.authModule ? this.authModule.getAuthToken() : ''}`
+                },
+                body: JSON.stringify(payload)
             });
 
             const data = await response.json();
             if (this.authModule) {
                 this.authModule.hideLoading();
             }
+
+            // Log de la respuesta para debugging
+            console.log('Respuesta del servidor:', {
+                status: response.status,
+                statusText: response.statusText,
+                data: data
+            });
 
             if (response.ok) {
                 const message = editId ? 'Tarea actualizada exitosamente' : 'Tarea creada exitosamente';
@@ -613,8 +640,9 @@ class TasksModule {
                     formElement.removeAttribute('data-edit-id');
                 }
             } else {
+                console.error('Error en la respuesta:', data);
                 if (this.authModule) {
-                    this.authModule.showNotification(data.error || 'Error al procesar tarea', 'error');
+                    this.authModule.showNotification(data.message || data.error || 'Error al procesar tarea', 'error');
                 }
             }
         } catch (error) {
@@ -695,8 +723,20 @@ class TasksModule {
                     if (titleField) titleField.value = task.titulo || '';
                     if (descField) descField.value = task.descripcion || '';
                     if (priorityField) priorityField.value = task.prioridad || 'MEDIA';
-                    if (dueDateField) dueDateField.value = task.fechaVencimiento || '';
-                    if (subjectField) subjectField.value = task.materia || '';
+                    
+                    // Formatear fecha límite para el input datetime-local
+                    if (dueDateField && task.fechaLimite) {
+                        const fecha = new Date(task.fechaLimite);
+                        const year = fecha.getFullYear();
+                        const month = String(fecha.getMonth() + 1).padStart(2, '0');
+                        const day = String(fecha.getDate()).padStart(2, '0');
+                        const hours = String(fecha.getHours()).padStart(2, '0');
+                        const minutes = String(fecha.getMinutes()).padStart(2, '0');
+                        dueDateField.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+                    }
+                    
+                    // Asignar el ID de la materia, no el objeto completo
+                    if (subjectField) subjectField.value = task.materia ? task.materia.id : '';
                 }, 200);
             } else {
                 if (this.authModule) {

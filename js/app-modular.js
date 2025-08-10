@@ -347,10 +347,10 @@ class TasksModule {
                                         <div class="mb-3">
                                             <label for="taskPriority" class="form-label">Prioridad</label>
                                             <select class="form-control" id="taskPriority">
-                                                <option value="baja">Baja</option>
-                                                <option value="media" selected>Media</option>
-                                                <option value="alta">Alta</option>
-                                                <option value="urgente">Urgente</option>
+                                                <option value="BAJA">Baja</option>
+                                                <option value="MEDIA" selected>Media</option>
+                                                <option value="ALTA">Alta</option>
+                                                <option value="URGENTE">Urgente</option>
                                             </select>
                                         </div>
                                     </div>
@@ -492,10 +492,10 @@ class TasksModule {
 
     getPriorityColor(priority) {
         const colors = {
-            'baja': 'success',
-            'media': 'warning',
-            'alta': 'danger',
-            'urgente': 'dark'
+            'BAJA': 'success',
+            'MEDIA': 'warning',
+            'ALTA': 'danger',
+            'URGENTE': 'dark'
         };
         return colors[priority] || 'secondary';
     }
@@ -570,8 +570,23 @@ class TasksModule {
                         descripcion: description,
                         prioridad: priority
                     };
-                    if (dueDate) payload.fechaVencimiento = dueDate;
-                    if (subject) payload.materia = { id: Number(subject) };
+                    
+                    // Convertir fecha de vencimiento a formato correcto
+                    if (dueDate) {
+                        const date = new Date(dueDate);
+                        const year = date.getFullYear();
+                        const month = String(date.getMonth() + 1).padStart(2, '0');
+                        const day = String(date.getDate()).padStart(2, '0');
+                        const hours = String(date.getHours()).padStart(2, '0');
+                        const minutes = String(date.getMinutes()).padStart(2, '0');
+                        payload.fechaLimite = `${year}-${month}-${day}T${hours}:${minutes}:00`;
+                    }
+                    
+                    // Agregar materia si está seleccionada
+                    if (subject) {
+                        payload.materia = { id: Number(subject) };
+                    }
+                    
                     return payload;
                 })())
             });
@@ -679,7 +694,7 @@ class TasksModule {
                     
                     if (titleField) titleField.value = task.titulo || '';
                     if (descField) descField.value = task.descripcion || '';
-                    if (priorityField) priorityField.value = task.prioridad || 'media';
+                    if (priorityField) priorityField.value = task.prioridad || 'MEDIA';
                     if (dueDateField) dueDateField.value = task.fechaVencimiento || '';
                     if (subjectField) subjectField.value = task.materia || '';
                 }, 200);
